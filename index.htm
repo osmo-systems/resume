@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathieu Antoine - Web Developer | Full Stack Developer</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Professional CV of Mathieu Antoine, a Web Developer with expertise in React.js, Angular, and NestJS. Based in Meylan, France.">
+    <meta name="keywords" content="web developer, full stack developer, React.js, Angular, NestJS, Mathieu Antoine, developer CV, frontend developer, backend developer">
+    <meta name="author" content="Mathieu Antoine">
+    <meta name="robots" content="index, follow">
+
+    <!-- Add jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #3498db;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --accent: #e74c3c;
+            --text: #333;
+            --secondary: #7f8c8d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--light);
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-buttons {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .language-toggle, .download-btn {
+            background-color: var(--dark);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .language-toggle:hover, .download-btn:hover {
+            background-color: #1a2530;
+            transform: translateY(-2px);
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .download-icon {
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 1.5rem 0 1rem 0;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .job {
+            margin-bottom: 1.5rem;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-title {
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .job-date {
+            color: var(--secondary);
+            font-style: italic;
+        }
+
+        .job-company {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .skill-tag {
+            background-color: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .contact-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .contact-item a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-item a:hover {
+            color: var(--light);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: var(--dark);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        .lang-en, .lang-fr {
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .loading-spinner {
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .job-header {
+                flex-direction: column;
+            }
+
+            .contact-list {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .header-buttons {
+                position: relative;
+                top: 0;
+                right: 0;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+        }
+
+        @media print {
+            .header-buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <span class="lang-en">Generating PDF...</span>
+    <span class="lang-fr hidden">Génération du PDF...</span>
+</div>
+
+<header>
+    <div class="header-buttons">
+        <button class="download-btn" id="downloadPdf">
+            <span class="download-icon">📥</span>
+            <span class="lang-en">Download CV</span>
+            <span class="lang-fr hidden">Télécharger CV</span>
+        </button>
+        <button class="language-toggle" id="langToggle">Français</button>
+    </div>
+    <h1>Mathieu Antoine</h1>
+    <p class="subtitle lang-en">Web Developer</p>
+    <p class="subtitle lang-fr hidden">Développeur Web</p>
+    <div class="contact-list">
+        <div class="contact-item">
+            <span>📧</span>
+            <a href="mailto:mathieuantoine4@gmail.com">mathieuantoine4@gmail.com</a>
+        </div>
+        <div class="contact-item">
+            <span>📱</span>
+            <a href="tel:+330782535520">07 82 53 55 20</a>
+        </div>
+        <div class="contact-item">
+            <span>📍</span>
+            <span class="lang-en">Meylan, Auvergne-Rhône-Alpes, France</span>
+            <span class="lang-fr hidden">Meylan, Auvergne-Rhône-Alpes, France</span>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <section class="section">
+        <h2 class="lang-en">About Me</h2>
+        <h2 class="lang-fr hidden">À Propos</h2>
+        <p class="lang-en">I am a 33-year-old French web developer with expertise in both frontend and backend development. My experience spans multiple companies where I've worked on diverse projects using modern web technologies. I am passionate about creating efficient, user-friendly web applications with a focus on clean code and innovative solutions.</p>
+        <p class="lang-fr hidden">Je suis un développeur web français de 33 ans, spécialisé dans le développement frontend et backend. Mon expérience s'étend à plusieurs entreprises où j'ai travaillé sur divers projets utilisant des technologies web modernes. Je suis passionné par la création d'applications web efficaces et conviviales, avec un accent sur le code propre et les solutions innovantes.</p>
+        <div class="social-links">
+            <a target="_blank" href="https://www.linkedin.com/in/mathieu-antoine-bb5bb5211" class="social-link">LinkedIn</a>
+            <a target="_blank" href="https://github.com/osmo-systems" class="social-link">GitHub</a>
+            <a target="_blank" href="https://github.com/osmo-systems/portfolio" class="social-link">Portfolio</a>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="lang-en">Professional Experience</h2>
+        <h2 class="lang-fr hidden">Expérience Professionnelle</h2>
+
+        <div class="job">
+            <div class="job-header">
+                <h3 class="job-title lang-en">Web Developer</h3>
+                <h3 class="job-title lang-fr hidden">Développeur Web</h3>
+                <span class="job-date lang-en">June 2023 - Present (1 year 10 months)</span>
+                <span class="job-date lang-fr hidden">Juin 2023 - Présent (1 an 10 mois)</span>
+            </div>
+            <p class="job-company">X-GIL (Company, Full System), Meylan, Auvergne-Rhône-Alpes, France</p>
+            <p class="lang-en">Working as a web developer focusing on building and maintaining web applications. Contributing to the development of responsive, user-friendly interfaces and robust backend systems.</p>
+            <p class="lang-fr hidden">Travail en tant que développeur web axé sur la création et la maintenance d'applications web. Contribution au développement d'interfaces réactives et conviviales ainsi que de systèmes backend robustes.</p>
+            <div class="skills-list">
+                <span class="skill-tag">React.js</span>
+                <span class="skill-tag">Angular</span>
+                <span class="skill-tag">NestJS</span>
+            </div>
+        </div>
+
+        <div class="job">
+            <div class="job-header">
+                <h3 class="job-title">Full Stack Developer</h3>
+                <span class="job-date lang-en">January 2022 - March 2023 (1 year 3 months)</span>
+                <span class="job-date lang-fr hidden">Janvier 2022 - Mars 2023 (1 an 3 mois)</span>
+            </div>
+            <p class="job-company">Nikdev, Malmö, Comté de Scanie, Suède</p>
+            <p class="lang-en">Developed digital solutions for the building industry. Conceived GraphQL APIs and custom component-based frontend frameworks. Reworked custom graph databases and set up Node Express servers. Collaborated closely with CTO and PO to determine optimal solutions for products. Conducted code reviews and designed integration programs.</p>
+            <p class="lang-fr hidden">Développement de solutions numériques pour l'industrie du bâtiment. Conception d'API GraphQL et de frameworks frontend basés sur des composants personnalisés. Refonte de bases de données graphiques personnalisées et mise en place de serveurs Node Express. Collaboration étroite avec le CTO et le PO pour déterminer les solutions optimales pour les produits. Réalisation de revues de code et conception de programmes d'intégration.</p>
+            <div class="skills-list">
+                <span class="skill-tag">GraphQL</span>
+                <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">Express</span>
+                <span class="skill-tag">Frontend Frameworks</span>
+            </div>
+        </div>
+
+        <div class="job">
+            <div class="job-header">
+                <h3 class="job-title lang-en">Frontend Web Developer</h3>
+                <h3 class="job-title lang-fr hidden">Développeur Web Frontend</h3>
+                <span class="job-date lang-en">September 2021 - December 2021 (4 months)</span>
+                <span class="job-date lang-fr hidden">Septembre 2021 - Décembre 2021 (4 mois)</span>
+            </div>
+            <p class="job-company">Mobilizing Expertise, Lund, Comté de Scanie, Suède</p>
+            <p class="lang-en">Built Kotlin applications, set up WordPress sites, and performed server administration. Focused on delivering high-quality frontend solutions and ensuring optimal server performance.</p>
+            <p class="lang-fr hidden">Construction d'applications Kotlin, configuration de sites WordPress et administration de serveurs. Concentration sur la fourniture de solutions frontend de haute qualité et l'assurance d'une performance optimale des serveurs.</p>
+            <div class="skills-list">
+                <span class="skill-tag">Kotlin</span>
+                <span class="skill-tag">WordPress</span>
+                <span class="skill-tag">Server Administration</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="lang-en">Education</h2>
+        <h2 class="lang-fr hidden">Formation</h2>
+        <div class="job">
+            <div class="job-header">
+                <h3 class="job-title">Titre professionnel (TP) de niveau 6, Programmation informatique</h3>
+                <span class="job-date">2020 - 2021</span>
+            </div>
+            <p class="job-company">AFPA</p>
+        </div>
+
+        <div class="job">
+            <div class="job-header">
+                <h3 class="job-title">Licence de Lettres Modernes, Langue anglaise et littérature / lettres</h3>
+                <span class="job-date lang-en">September 2015 - July 2018</span>
+                <span class="job-date lang-fr hidden">Septembre 2015 - Juillet 2018</span>
+            </div>
+            <p class="job-company">Université Bretagne Sud</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="lang-en">Skills</h2>
+        <h2 class="lang-fr hidden">Compétences</h2>
+        <div class="skills-list">
+            <span class="skill-tag">React.js</span>
+            <span class="skill-tag">Angular</span>
+            <span class="skill-tag">NestJS</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">TypeScript</span>
+            <span class="skill-tag">HTML5</span>
+            <span class="skill-tag">CSS3</span>
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">Express</span>
+            <span class="skill-tag">GraphQL</span>
+            <span class="skill-tag">WordPress</span>
+            <span class="skill-tag">Kotlin</span>
+            <span class="skill-tag">Server Administration</span>
+            <span class="skill-tag">Git</span>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="lang-en">Languages</h2>
+        <h2 class="lang-fr hidden">Langues</h2>
+        <ul class="lang-en">
+            <li><strong>French:</strong> Native</li>
+            <li><strong>English:</strong> Fluent</li>
+        </ul>
+        <ul class="lang-fr hidden">
+            <li><strong>Français:</strong> Langue maternelle</li>
+            <li><strong>Anglais:</strong> Courant</li>
+        </ul>
+    </section>
+</div>
+
+<footer>
+    <p class="lang-en">&copy; 2025 Mathieu Antoine. All rights reserved.</p>
+    <p class="lang-fr hidden">&copy; 2025 Mathieu Antoine. Tous droits réservés.</p>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const langToggle = document.getElementById('langToggle');
+        const downloadBtn = document.getElementById('downloadPdf');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const enElements = document.querySelectorAll('.lang-en');
+        const frElements = document.querySelectorAll('.lang-fr');
+        let currentLang = 'en';
+
+        // Detect browser language preference
+        function detectBrowserLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            return browserLang.substring(0, 2).toLowerCase() === 'fr' ? 'fr' : 'en';
+        }
+
+        // Set initial language based on browser preference
+        function setInitialLanguage() {
+            const preferredLang = detectBrowserLanguage();
+            if (preferredLang === 'fr') {
+                // Set to French
+                enElements.forEach(el => el.classList.add('hidden'));
+                frElements.forEach(el => el.classList.remove('hidden'));
+                langToggle.textContent = 'English';
+                document.documentElement.lang = 'fr';
+                currentLang = 'fr';
+            } else {
+                // Set to English (default)
+                frElements.forEach(el => el.classList.add('hidden'));
+                enElements.forEach(el => el.classList.remove('hidden'));
+                langToggle.textContent = 'Français';
+                document.documentElement.lang = 'en';
+                currentLang = 'en';
+            }
+        }
+
+        // Toggle language when button is clicked
+        langToggle.addEventListener('click', function() {
+            if (currentLang === 'en') {
+                // Switch to French
+                enElements.forEach(el => el.classList.add('hidden'));
+                frElements.forEach(el => el.classList.remove('hidden'));
+                langToggle.textContent = 'English';
+                document.documentElement.lang = 'fr';
+                currentLang = 'fr';
+            } else {
+                // Switch to English
+                frElements.forEach(el => el.classList.add('hidden'));
+                enElements.forEach(el => el.classList.remove('hidden'));
+                langToggle.textContent = 'Français';
+                document.documentElement.lang = 'en';
+                currentLang = 'en';
+            }
+        });
+
+        // Set initial language on page load
+        setInitialLanguage();
+
+        // PDF Download functionality
+        downloadBtn.addEventListener('click', function() {
+            // Show loading overlay
+            loadingOverlay.style.display = 'flex';
+
+            // Temporarily hide the buttons during capture
+            const headerButtons = document.querySelector('.header-buttons');
+            headerButtons.style.display = 'none';
+
+            setTimeout(() => {
+                // Use jsPDF and html2canvas for PDF generation
+                const { jsPDF } = window.jspdf;
+
+                const cvContainer = document.body;
+                const pdfName = currentLang === 'en' ? 'Mathieu_Antoine_CV_EN.pdf' : 'Mathieu_Antoine_CV_FR.pdf';
+
+                html2canvas(cvContainer, {
+                    scale: 1,
+                    useCORS: true,
+                    logging: false,
+                    allowTaint: true
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    const imgWidth = canvas.width;
+                    const imgHeight = canvas.height;
+                    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+                    const imgX = (pdfWidth - imgWidth * ratio) / 2;
+                    const imgY = 0;
+
+                    pdf.addImage(imgData, 'JPEG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+                    pdf.save(pdfName);
+
+                    // Hide loading overlay and restore buttons
+                    loadingOverlay.style.display = 'none';
+                    headerButtons.style.display = 'flex';
+                });
+            }, 500);
+        });
+    });
+</script>
+</body>
+</html>
