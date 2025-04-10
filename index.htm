@@ -11,10 +11,6 @@
     <meta name="author" content="Mathieu Antoine">
     <meta name="robots" content="index, follow">
 
-    <!-- Add jsPDF library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
     <style>
         :root {
             --primary: #3498db;
@@ -286,11 +282,6 @@
 
 <header>
     <div class="header-buttons">
-<!--        <button class="download-btn" id="downloadPdf">-->
-<!--            <span class="download-icon">📥</span>-->
-<!--            <span class="lang-en">Download CV</span>-->
-<!--            <span class="lang-fr hidden">Télécharger CV</span>-->
-<!--        </button>-->
         <button class="language-toggle" id="langToggle">Français</button>
     </div>
     <h1>Mathieu Antoine</h1>
@@ -446,7 +437,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const langToggle = document.getElementById('langToggle');
-        const downloadBtn = document.getElementById('downloadPdf');
         const loadingOverlay = document.getElementById('loadingOverlay');
         const enElements = document.querySelectorAll('.lang-en');
         const frElements = document.querySelectorAll('.lang-fr');
@@ -499,49 +489,6 @@
 
         // Set initial language on page load
         setInitialLanguage();
-
-        // PDF Download functionality
-        downloadBtn.addEventListener('click', function() {
-            // Show loading overlay
-            loadingOverlay.style.display = 'flex';
-
-            // Temporarily hide the buttons during capture
-            const headerButtons = document.querySelector('.header-buttons');
-            headerButtons.style.display = 'none';
-
-            setTimeout(() => {
-                // Use jsPDF and html2canvas for PDF generation
-                const { jsPDF } = window.jspdf;
-
-                const cvContainer = document.body;
-                const pdfName = currentLang === 'en' ? 'Mathieu_Antoine_CV_EN.pdf' : 'Mathieu_Antoine_CV_FR.pdf';
-
-                html2canvas(cvContainer, {
-                    scale: 1,
-                    useCORS: true,
-                    logging: false,
-                    allowTaint: true
-                }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = pdf.internal.pageSize.getHeight();
-                    const imgWidth = canvas.width;
-                    const imgHeight = canvas.height;
-                    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-                    const imgX = (pdfWidth - imgWidth * ratio) / 2;
-                    const imgY = 0;
-
-                    pdf.addImage(imgData, 'JPEG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-                    pdf.save(pdfName);
-
-                    // Hide loading overlay and restore buttons
-                    loadingOverlay.style.display = 'none';
-                    headerButtons.style.display = 'flex';
-                });
-            }, 500);
-        });
-    });
 </script>
 </body>
 </html>
