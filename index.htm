@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +11,9 @@
     <meta name="keywords" content="web developer, full stack developer, React.js, Angular, NestJS, Mathieu Antoine, developer CV, frontend developer, backend developer">
     <meta name="author" content="Mathieu Antoine">
     <meta name="robots" content="index, follow">
+
+    <!-- Import html2pdf.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         :root {
@@ -37,7 +41,7 @@
         header {
             background: linear-gradient(135deg, var(--primary), #1a5276);
             color: white;
-            padding: 2rem;
+            padding: 2em;
             text-align: center;
             position: relative;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -74,7 +78,7 @@
         }
 
         .download-icon {
-            font-size: 1.1rem;
+            font-size: 1.1em;
         }
 
         .container {
@@ -84,46 +88,46 @@
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
         }
 
         h2 {
-            font-size: 1.8rem;
+            font-size: 1.8em;
             color: var(--primary);
             margin: 1.5rem 0 1rem 0;
             border-bottom: 2px solid var(--primary);
-            padding-bottom: 0.5rem;
+            padding-bottom: 0.5em;
         }
 
         h3 {
-            font-size: 1.3rem;
+            font-size: 1.3em;
             color: var(--dark);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.5em;
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.2em;
             color: white;
         }
 
         .section {
-            margin-bottom: 2rem;
+            margin-bottom: 2em;
             background-color: white;
-            padding: 1.5rem;
+            padding: 1.5em;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
+            transition: box-shadow 0.3s ease;
         }
 
         .section:hover {
-            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .job {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
+            margin-bottom: 1.5em;
+            padding-bottom: 1.5em;
             border-bottom: 1px solid #eee;
         }
 
@@ -134,9 +138,13 @@
 
         .job-header {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            margin-bottom: 0.5rem;
-            flex-wrap: wrap;
+        }
+
+        .job-header > h3 {
+            margin: 0;
+            flex-wrap: nowrap;
         }
 
         .job-title {
@@ -147,11 +155,26 @@
         .job-date {
             color: var(--secondary);
             font-style: italic;
+            align-self: flex-start;
         }
 
         .job-company {
-            font-weight: 500;
-            margin-bottom: 0.5rem;
+            font-style: italic;
+            margin-bottom: 1em;
+        }
+
+        ul, ol {
+            padding-left: 1.5em;
+            margin-bottom: 1em;
+            list-style-type: square;
+        }
+
+        li {
+            margin-bottom: 0.5em;
+        }
+
+        li:last-child {
+            margin-bottom: 0;
         }
 
         .skills-list {
@@ -159,6 +182,7 @@
             flex-wrap: wrap;
             gap: 10px;
             margin-top: 15px;
+            padding-left: 0;
         }
 
         .skill-tag {
@@ -166,13 +190,8 @@
             color: white;
             padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-
-        .skill-tag:hover {
-            background-color: #1a5276;
-            transform: scale(1.05);
+            font-size: 0.9em;
+            transition: background-color 0.3s;
         }
 
         .contact-list {
@@ -226,12 +245,24 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
+        /* Links for print version */
+        .print-links {
+            display: none;
+            margin-top: 1em;
+        }
+
+        .print-links a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
         footer {
             background-color: var(--dark);
             color: white;
             text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
+            padding: 1.5em;
+            margin-top: 2em;
         }
 
         .lang-en, .lang-fr {
@@ -256,7 +287,7 @@
             align-items: center;
             z-index: 1000;
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.2em;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s;
@@ -291,6 +322,10 @@
 
             .header-buttons, .social-links {
                 display: none !important;
+            }
+
+            .print-links {
+                display: block !important;
             }
 
             .section {
@@ -339,11 +374,11 @@
             }
 
             h1 {
-                font-size: 2rem;
+                font-size: 2em;
             }
 
             .section {
-                padding: 1.2rem;
+                padding: 1.2em;
             }
 
             .contact-list {
@@ -405,12 +440,24 @@
     </div>
 </header>
 
-<div class="container">
+<div class="container" id="cvContent">
     <section class="section" aria-labelledby="about-section">
         <h2 class="lang-en" id="about-section">About Me</h2>
         <h2 class="lang-fr hidden" id="about-section-fr">À Propos</h2>
         <p class="lang-en">I am a 33-year-old French web developer with expertise in both frontend and backend development. My experience spans multiple companies where I've worked on diverse projects using modern web technologies. I am passionate about creating efficient, user-friendly web applications with a focus on clean code and innovative solutions.</p>
         <p class="lang-fr hidden">Je suis un développeur web français de 33 ans, spécialisé dans le développement frontend et backend. Mon expérience s'étend à plusieurs entreprises où j'ai travaillé sur divers projets utilisant des technologies web modernes. Je suis passionné par la création d'applications web efficaces et conviviales, avec un accent sur le code propre et les solutions innovantes.</p>
+
+        <!-- Links that will appear in print version -->
+        <div class="print-links">
+            <span class="lang-en">LinkedIn: <a href="https://www.linkedin.com/in/mathieu-antoine-bb5bb5211">linkedin.com/in/mathieu-antoine-bb5bb5211</a></span>
+            <span class="lang-fr hidden">LinkedIn: <a href="https://www.linkedin.com/in/mathieu-antoine-bb5bb5211">linkedin.com/in/mathieu-antoine-bb5bb5211</a></span>
+            <span class="lang-en">GitHub: <a href="https://github.com/osmo-systems">github.com/osmo-systems</a></span>
+            <span class="lang-fr hidden">GitHub: <a href="https://github.com/osmo-systems">github.com/osmo-systems</a></span>
+            <span class="lang-en">Portfolio: <a href="https://github.com/osmo-systems/portfolio">github.com/osmo-systems/portfolio</a></span>
+            <span class="lang-fr hidden">Portfolio: <a href="https://github.com/osmo-systems/portfolio">github.com/osmo-systems/portfolio</a></span>
+        </div>
+
+        <!-- Buttons for web version -->
         <div class="social-links">
             <a target="_blank" href="https://www.linkedin.com/in/mathieu-antoine-bb5bb5211" class="social-link" aria-label="LinkedIn Profile">
                 <span aria-hidden="true">🔗</span> LinkedIn
@@ -510,7 +557,8 @@
         <div class="job">
             <div class="job-header">
                 <h3 class="job-title">Titre professionnel (TP) de niveau 6, Programmation informatique</h3>
-                <span class="job-date">2020 - 2021</span>
+                <div class="job-date lang-en">September 2020 - July 2021</div>
+                <div class="job-date lang-fr hidden">Septembre 2020 - Juillet 2021</div>
             </div>
             <p class="job-company">AFPA</p>
         </div>
@@ -518,8 +566,8 @@
         <div class="job">
             <div class="job-header">
                 <h3 class="job-title">Licence de Lettres Modernes, Langue anglaise et littérature / lettres</h3>
-                <span class="job-date lang-en">September 2015 - July 2018</span>
-                <span class="job-date lang-fr hidden">Septembre 2015 - Juillet 2018</span>
+                <div class="job-date lang-en">September 2015 - July 2018</div>
+                <div class="job-date lang-fr hidden">Septembre 2015 - Juillet 2018</div>
             </div>
             <p class="job-company">Université Bretagne Sud</p>
         </div>
@@ -527,8 +575,8 @@
         <div class="job">
             <div class="job-header">
                 <h3 class="job-title">Baccalauréat scientifique</h3>
-                <span class="job-date lang-en">September 2008 - July 2011</span>
-                <span class="job-date lang-fr hidden">Septembre 2008 - Juillet 2011</span>
+                <div class="job-date lang-en">September 2008 - July 2011</div>
+                <div class="job-date lang-fr hidden">Septembre 2008 - Juillet 2011</div>
             </div>
             <p class="job-company">Lycée Notre Dame Guingamp</p>
         </div>
@@ -548,7 +596,7 @@
             <span class="skill-tag">Node.js</span>
             <span class="skill-tag">Express</span>
             <span class="skill-tag">GraphQL</span>
-            <span class="skill-tag">WordPress</span>
+            <span class="skill-tag">Figma</span>
             <span class="skill-tag">Kotlin</span>
             <span class="skill-tag">Server Administration</span>
             <span class="skill-tag">Git</span>
@@ -575,93 +623,160 @@
 </footer>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const langToggle = document.getElementById('langToggle');
-        const downloadBtn = document.getElementById('downloadPdf');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const enElements = document.querySelectorAll('.lang-en');
-        const frElements = document.querySelectorAll('.lang-fr');
-        let currentLang = 'en';
+	document.addEventListener('DOMContentLoaded', function() {
+		const langToggle = document.getElementById('langToggle');
+		const downloadBtn = document.getElementById('downloadPdf');
+		const loadingOverlay = document.getElementById('loadingOverlay');
+		const enElements = document.querySelectorAll('.lang-en');
+		const frElements = document.querySelectorAll('.lang-fr');
+		let currentLang = 'en';
 
-        // Detect browser language preference
-        function detectBrowserLanguage() {
-            const browserLang = navigator.language || navigator.userLanguage;
-            return browserLang.substring(0, 2).toLowerCase() === 'fr' ? 'fr' : 'en';
-        }
+		// Detect browser language preference
+		function detectBrowserLanguage() {
+			const browserLang = navigator.language || navigator.userLanguage;
+			return browserLang.substring(0, 2).toLowerCase() === 'fr' ? 'fr' : 'en';
+		}
 
-        // Set initial language based on browser preference
-        function setInitialLanguage() {
-            const preferredLang = detectBrowserLanguage();
-            if (preferredLang === 'fr') {
-                // Set to French
-                enElements.forEach(el => el.classList.add('hidden'));
-                frElements.forEach(el => el.classList.remove('hidden'));
-                langToggle.textContent = 'English';
-                document.documentElement.lang = 'fr';
-                currentLang = 'fr';
-            } else {
-                // Set to English (default)
-                frElements.forEach(el => el.classList.add('hidden'));
-                enElements.forEach(el => el.classList.remove('hidden'));
-                langToggle.textContent = 'Français';
-                document.documentElement.lang = 'en';
-                currentLang = 'en';
-            }
-        }
+		// Set initial language based on browser preference
+		function setInitialLanguage() {
+			const preferredLang = detectBrowserLanguage();
+			if (preferredLang === 'fr') {
+				// Set to French
+				enElements.forEach(el => el.classList.add('hidden'));
+				frElements.forEach(el => el.classList.remove('hidden'));
+				langToggle.textContent = 'English';
+				document.documentElement.lang = 'fr';
+				currentLang = 'fr';
+			} else {
+				// Set to English (default)
+				frElements.forEach(el => el.classList.add('hidden'));
+				enElements.forEach(el => el.classList.remove('hidden'));
+				langToggle.textContent = 'Français';
+				document.documentElement.lang = 'en';
+				currentLang = 'en';
+			}
+		}
 
-        // Toggle language when button is clicked
-        langToggle.addEventListener('click', function() {
-            if (currentLang === 'en') {
-                // Switch to French
-                enElements.forEach(el => el.classList.add('hidden'));
-                frElements.forEach(el => el.classList.remove('hidden'));
-                langToggle.textContent = 'English';
-                document.documentElement.lang = 'fr';
-                currentLang = 'fr';
-            } else {
-                // Switch to English
-                frElements.forEach(el => el.classList.add('hidden'));
-                enElements.forEach(el => el.classList.remove('hidden'));
-                langToggle.textContent = 'Français';
-                document.documentElement.lang = 'en';
-                currentLang = 'en';
-            }
-        });
+		// Toggle language when button is clicked
+		langToggle.addEventListener('click', function() {
+			if (currentLang === 'en') {
+				// Switch to French
+				enElements.forEach(el => el.classList.add('hidden'));
+				frElements.forEach(el => el.classList.remove('hidden'));
+				langToggle.textContent = 'English';
+				document.documentElement.lang = 'fr';
+				currentLang = 'fr';
+			} else {
+				// Switch to English
+				frElements.forEach(el => el.classList.add('hidden'));
+				enElements.forEach(el => el.classList.remove('hidden'));
+				langToggle.textContent = 'Français';
+				document.documentElement.lang = 'en';
+				currentLang = 'en';
+			}
+		});
 
-        // Download PDF functionality
-        downloadBtn.addEventListener('click', function() {
-            // Show loading overlay
-            loadingOverlay.classList.add('active');
-            
-            // Simulate PDF generation (would be replaced with actual PDF generation)
-            setTimeout(() => {
-                // In a real implementation, you would use a library like html2pdf.js or jsPDF
-                // For this example, we'll just simulate the download completion
-                loadingOverlay.classList.remove('active');
-                
-                // Create a simple alert to inform the user
-                alert(currentLang === 'en' ? 
-                    'CV download completed!' : 
-                    'Téléchargement du CV terminé!');
-                
-                // In a real implementation, you would trigger the download here
-                // window.location.href = 'path/to/generated/cv.pdf';
-            }, 2000);
-        });
+		// PDF generation and download functionality
+		downloadBtn.addEventListener('click', function() {
+			// Show loading overlay
+			loadingOverlay.classList.add('active');
 
-        // Set initial language on page load
-        setInitialLanguage();
-        
-        // Error handling for the PDF download
-        window.addEventListener('error', function(e) {
-            if (loadingOverlay.classList.contains('active')) {
-                loadingOverlay.classList.remove('active');
-                alert(currentLang === 'en' ? 
-                    'Error generating PDF. Please try again.' : 
-                    'Erreur lors de la génération du PDF. Veuillez réessayer.');
-            }
-        });
-    });
+			// Clone the content for PDF generation
+			const cvContent = document.getElementById('cvContent').cloneNode(true);
+
+			// Add header info to the PDF content
+			const headerInfo = document.createElement('div');
+			headerInfo.innerHTML = `
+                <h1 style="text-align: center; color: #2980b9; margin-bottom: 10px;">Mathieu Antoine</h1>
+                <p style="text-align: center; font-size: 1.2em; margin-bottom: 15px;">
+                    ${currentLang === 'en' ? 'Web Developer' : 'Développeur Web'}
+                </p>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <p>📧 mathieuantoine4@gmail.com | 📱 07 82 53 55 20 | 📍 Meylan, Auvergne-Rhône-Alpes, France</p>
+                </div>
+            `;
+
+			// Insert header at the beginning of the content
+			cvContent.insertBefore(headerInfo, cvContent.firstChild);
+
+			// Hide any hidden elements based on current language
+			if (currentLang === 'en') {
+				cvContent.querySelectorAll('.lang-fr').forEach(el => {
+					el.remove();
+				});
+			} else {
+				cvContent.querySelectorAll('.lang-en').forEach(el => {
+					el.remove();
+				});
+			}
+
+			// Remove any hidden class from remaining elements
+			cvContent.querySelectorAll('.hidden').forEach(el => {
+				el.classList.remove('hidden');
+			});
+
+			// Make print links visible and social links hidden for PDF
+			cvContent.querySelectorAll('.social-links').forEach(el => {
+				el.style.display = 'none';
+			});
+
+			cvContent.querySelectorAll('.print-links').forEach(el => {
+				el.style.display = 'block';
+			});
+
+			// Style skill tags for PDF
+			cvContent.querySelectorAll('.skill-tag').forEach(tag => {
+				tag.style.border = '1px solid #2980b9';
+				tag.style.color = '#2980b9';
+				tag.style.backgroundColor = 'white';
+				tag.style.padding = '3px 10px';
+				tag.style.borderRadius = '15px';
+				tag.style.display = 'inline-block';
+				tag.style.margin = '5px';
+			});
+
+            cvContent.querySelectorAll('section').forEach(el => {
+				el.style.padding = '2px';
+            })
+
+          cvContent.style.fontSize = '12px';
+
+			// Configure pdf options
+			const pdfOptions = {
+				margin: 10,
+				filename: currentLang === 'en' ? 'Mathieu_Antoine_CV_EN.pdf' : 'Mathieu_Antoine_CV_FR.pdf',
+				image: { type: 'jpeg', quality: 0.98 },
+				html2canvas: { scale: 2, useCORS: true },
+				jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+			};
+
+			// Generate and download PDF
+			html2pdf().from(cvContent).set(pdfOptions).save()
+				.then(() => {
+					loadingOverlay.classList.remove('active');
+				})
+				.catch(error => {
+					console.error('Error generating PDF:', error);
+					loadingOverlay.classList.remove('active');
+					alert(currentLang === 'en' ?
+						'Error generating PDF. Please try again.' :
+						'Erreur lors de la génération du PDF. Veuillez réessayer.');
+				});
+		});
+
+		// Set initial language on page load
+		setInitialLanguage();
+
+		// Error handling for the PDF download
+		window.addEventListener('error', function(e) {
+			if (loadingOverlay.classList.contains('active')) {
+				loadingOverlay.classList.remove('active');
+				alert(currentLang === 'en' ?
+					'Error generating PDF. Please try again.' :
+					'Erreur lors de la génération du PDF. Veuillez réessayer.');
+			}
+		});
+	});
 </script>
 </body>
 </html>
